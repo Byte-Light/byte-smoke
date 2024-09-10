@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Category {
   name: string;
-  icon: string; // For simplicity, you can use URLs or paths to icons
+  icon: string;
 }
 
 const categories: Category[] = [
@@ -17,15 +17,23 @@ const categories: Category[] = [
 
 const ProductCategories: React.FC = () => {
   return (
-    <div className="flex flex-wrap justify-center space-x-4 space-y-4 lg:space-x-8 mt-8">
+    <div className="flex flex-wrap justify-center gap-8 mt-12">
       {categories.map((category) => (
-        <div key={category.name} className="flex flex-col items-center space-y-2">
-          <img
-            src={category.icon}
-            alt={category.name}
-            className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24"
-          />
-          <p className="text-center text-sm md:text-base lg:text-lg font-semibold">
+        <div
+          key={category.name}
+          className="flex flex-col items-center space-y-3 transform transition-transform duration-300 hover:scale-105"
+        >
+          {/* Icon */}
+          <div className="w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 bg-gray-100 p-4 rounded-full shadow-md transition-shadow duration-300 hover:shadow-xl">
+            <img
+              src={category.icon}
+              alt={category.name}
+              className="w-full h-full object-contain"
+            />
+          </div>
+
+          {/* Category Name */}
+          <p className="text-center text-base md:text-lg lg:text-xl font-semibold text-gray-700 hover:text-indigo-600 transition-colors duration-300">
             {category.name}
           </p>
         </div>

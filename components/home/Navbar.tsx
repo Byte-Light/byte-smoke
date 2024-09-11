@@ -25,8 +25,8 @@ const Navbar: React.FC = () => {
             <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
               Rum
             </a>
-            <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              New In
+            <a href="/products" className="text-gray-700 hover:text-indigo-500 transition duration-300">
+              Products
             </a>
           </div>
 
@@ -54,8 +54,8 @@ const Navbar: React.FC = () => {
             <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
               Rum
             </a>
-            <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              New In
+            <a href="/products" className="text-gray-700 hover:text-indigo-500 transition duration-300">
+              Products
             </a>
           </div>
         )}

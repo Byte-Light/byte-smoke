@@ -3,7 +3,7 @@ import { FaHeart, FaHeadset, FaSearch, FaShoppingBasket, FaClipboardList } from 
 
 const Header: React.FC = () => {
   return (
-    <header className="w-full py-4 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-lg">
+    <header className="w-full py-4 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 flex justify-between items-center space-x-6">
         
         {/* Logo */}

@@ -2,6 +2,7 @@ import CigarSection from "@/components/home/CigarSection";
 import CigarSpotlight from "@/components/home/CigarSpotlight";
 import EventTickets from "@/components/home/EventTickets";
 import Footer from "@/components/home/Footer";
+import GoogleMapComponent from "@/components/home/GoogleMap";
 import GreenFamily from "@/components/home/GreenFamily";
 import GridSection from "@/components/home/GridSection";
 import Header from "@/components/home/Header";
@@ -18,6 +19,7 @@ export default function Home() {
       <Header />
       <Navbar />
       <GridSection />
+      <GoogleMapComponent />
       <ProductCategories />
       <CigarSection />
       <EventTickets />

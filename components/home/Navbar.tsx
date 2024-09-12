@@ -1,108 +1,45 @@
-"use client"
-import React, { useState } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
+import React from 'react';
+import Link from 'next/link'; // Import Link from Next.js
 
-const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <nav className="w-full bg-gradient-to-r from-gray-100 to-gray-200 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Main Navbar Links */}
-          <div className="hidden md:flex space-x-8">
-            <Dropdown title="Cigars" />
-            <Dropdown title="Cigarettes" />
-            <Dropdown title="Hand Rolling Tobacco" />
-            <Dropdown title="Tobaccos" />
-            <Dropdown title="Pipes" />
-            <Dropdown title="Vapes" />
-            <Dropdown title="Accessories" />
-            <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              Rum
-            </a>
-            <a href="/products" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              Products
-            </a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMenu}
-              className="text-gray-700 focus:outline-none hover:text-indigo-500 transition duration-300"
-            >
-              <FaChevronDown size={24} />
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden flex flex-col space-y-2 pt-2">
-            <Dropdown title="Cigars" />
-            <Dropdown title="Cigarettes" />
-            <Dropdown title="Hand Rolling Tobacco" />
-            <Dropdown title="Tobaccos" />
-            <Dropdown title="Pipes" />
-            <Dropdown title="Vapes" />
-            <Dropdown title="Accessories" />
-            <a href="#" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              Rum
-            </a>
-            <a href="/products" className="text-gray-700 hover:text-indigo-500 transition duration-300">
-              Products
-            </a>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
-};
-
-interface DropdownProps {
-  title: string;
+interface Category {
+  name: string;
+  icon: string;
+  route: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ title }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const categories: Category[] = [
+  { name: 'Cigars', icon: '/images/cigar.png', route: '/cigars' },
+  { name: 'Cigarettes', icon: '/images/cigaret.png', route: '/cigarettes' },
+  { name: 'RYO Tobacco', icon: '/images/ryo.png', route: '/ryo-tobacco' },
+  { name: 'Pipe Tobacco', icon: '/images/pipe.png', route: '/pipe-tobacco' },
+  { name: 'Pipes', icon: '/images/pipes.png', route: '/pipes' },
+  { name: 'Accessories', icon: '/images/access.png', route: '/accessories' },
+  { name: 'Vapes', icon: '/images/vapes.webp', route: '/vapes' },
+];
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
+const Navbar: React.FC = () => {
   return (
-    <div className="relative">
-      <button
-        onClick={toggleDropdown}
-        className="flex items-center space-x-1 text-gray-700 hover:text-indigo-500 transition duration-300"
-      >
-        <span>{title}</span>
-        <FaChevronDown size={12} />
-      </button>
+    <nav className="flex items-center justify-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-lg py-5 px-10">
+      {categories.map((category) => (
+        <Link key={category.name} href={category.route}>
+          <div className="flex items-center justify-center space-x-3 transition-transform duration-300 hover:scale-110 group cursor-pointer mx-4">
+            {/* Icon */}
+            <div className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-purple-50 to-indigo-100 p-3 rounded-full shadow-md transition-shadow duration-300 hover:shadow-xl group-hover:from-purple-100 group-hover:to-indigo-200">
+              <img
+                src={category.icon}
+                alt={category.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
 
-      {/* Dropdown Menu */}
-      {isDropdownOpen && (
-        <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-10 transition-transform transform scale-95 origin-top">
-          <a
-            href="#"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 transition duration-200"
-          >
-            Subcategory 1
-          </a>
-          <a
-            href="#"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 transition duration-200"
-          >
-            Subcategory 2
-          </a>
-        </div>
-      )}
-    </div>
+            {/* Category Name */}
+            <p className="text-sm md:text-base lg:text-lg font-semibold text-white group-hover:text-yellow-300 transition-colors duration-300">
+              {category.name}
+            </p>
+          </div>
+        </Link>
+      ))}
+    </nav>
   );
 };
 

@@ -1,33 +1,22 @@
-import CigarSection from "@/components/home/CigarSection";
+
+import ByteFamily from "@/components/home/ByteFamily";
 import CigarSpotlight from "@/components/home/CigarSpotlight";
-import EventTickets from "@/components/home/EventTickets";
 import Footer from "@/components/home/Footer";
 import GoogleMapComponent from "@/components/home/GoogleMap";
-import GreenFamily from "@/components/home/GreenFamily";
 import GridSection from "@/components/home/GridSection";
-import Header from "@/components/home/Header";
-import Navbar from "@/components/home/Navbar";
-import ProductCategories from "@/components/home/ProductCategories";
 import ReviewsSection from "@/components/home/ReviewsSection";
-import SubscribeTV from "@/components/home/SubscribeTV";
 import TobaccoInfo from "@/components/home/TobaccoInfo";
 
 export default function Home() {
   return (
     
     <div>
-      <Header />
-      <Navbar />
       <GridSection />
-      <GoogleMapComponent />
-      <ProductCategories />
-      <CigarSection />
-      <EventTickets />
-      <SubscribeTV />
       <CigarSpotlight />
-      <GreenFamily />
+      <ByteFamily />
       <TobaccoInfo />
       <ReviewsSection />
+      <GoogleMapComponent />
       <Footer />
     </div>
   );

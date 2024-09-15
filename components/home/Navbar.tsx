@@ -1,46 +1,89 @@
-import React from 'react';
-import Link from 'next/link'; // Import Link from Next.js
+"use client";
 
-interface Category {
-  name: string;
-  icon: string;
-  route: string;
-}
-
-const categories: Category[] = [
-  { name: 'Cigars', icon: '/images/cigar.png', route: '/cigars' },
-  { name: 'Cigarettes', icon: '/images/cigaret.png', route: '/cigarettes' },
-  { name: 'RYO Tobacco', icon: '/images/ryo.png', route: '/ryo-tobacco' },
-  { name: 'Pipe Tobacco', icon: '/images/pipe.png', route: '/pipe-tobacco' },
-  { name: 'Pipes', icon: '/images/pipes.png', route: '/pipes' },
-  { name: 'Accessories', icon: '/images/access.png', route: '/accessories' },
-  { name: 'Vapes', icon: '/images/vapes.webp', route: '/vapes' },
-];
+import { useState } from 'react';
+import Link from 'next/link';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar: React.FC = () => {
-  return (
-    <nav className="flex items-center justify-center bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 shadow-lg py-5 px-10">
-      {categories.map((category) => (
-        <Link key={category.name} href={category.route}>
-          <div className="flex items-center justify-center space-x-3 transition-transform duration-300 hover:scale-110 group cursor-pointer mx-4">
-            {/* Icon */}
-            <div className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 bg-gradient-to-r from-purple-50 to-indigo-100 p-3 rounded-full shadow-md transition-shadow duration-300 hover:shadow-xl group-hover:from-purple-100 group-hover:to-indigo-200">
-              <img
-                src={category.icon}
-                alt={category.name}
-                className="w-full h-full object-contain"
-              />
-            </div>
+  const [isOpen, setIsOpen] = useState(false);
 
-            {/* Category Name */}
-            <p className="text-sm md:text-base lg:text-lg font-semibold text-white group-hover:text-yellow-300 transition-colors duration-300">
-              {category.name}
-            </p>
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <nav className="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 text-white left-0 w-full z-50 shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="hidden md:flex space-x-8 items-center">
+            {/** Main Navigation Links */}
+            <NavLink label="Vaping" links={vapingLinks} />
+            <NavLink label="Kratom" links={kratomLinks} />
+            <NavLink label="Cannabis" links={cannabisLinks} />
+            <NavLink label="Cigar" links={cigarLinks} />
+            <NavLink label="Glassware" links={glasswareLinks} />
+            <NavLink label="Tobacco Products" links={tobaccoLinks} />
+            <NavLink label="Smoking Accessories" links={smokingAccessoriesLinks} />
+            <NavLink label="Hookah Supplies" links={hookahLinks} />
+            <NavLink label="Incense" links={incenseLinks} />
           </div>
-        </Link>
-      ))}
+          <div className="md:hidden flex items-center">
+            <button onClick={toggleMenu} className="text-white focus:outline-none">
+              {isOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/** Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-purple-600">
+          <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+            <NavLink label="Vaping" links={vapingLinks} mobile />
+            <NavLink label="Kratom" links={kratomLinks} mobile />
+            <NavLink label="Cannabis" links={cannabisLinks} mobile />
+            <NavLink label="Cigar" links={cigarLinks} mobile />
+            <NavLink label="Glassware" links={glasswareLinks} mobile />
+            <NavLink label="Tobacco Products" links={tobaccoLinks} mobile />
+            <NavLink label="Smoking Accessories" links={smokingAccessoriesLinks} mobile />
+            <NavLink label="Hookah Supplies" links={hookahLinks} mobile />
+            <NavLink label="Incense" links={incenseLinks} mobile />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
 
 export default Navbar;
+
+const NavLink: React.FC<{ label: string, links: string[], mobile?: boolean }> = ({ label, links, mobile }) => (
+  <div className={`relative group ${mobile ? 'block' : 'inline-block'}`}>
+    <Link href="#">
+      <span className={`block ${mobile ? 'px-3 py-2' : 'px-4 py-2'} text-sm font-medium cursor-pointer`}>
+        {label}
+      </span>
+    </Link>
+    <div
+      className={`absolute left-0 mt-2 py-2 w-48 bg-white text-black rounded-lg shadow-lg z-40 ${
+        mobile ? 'block' : 'hidden group-hover:block'
+      }`}
+    >
+      {links.map((link, idx) => (
+        <Link href="#" key={idx}>
+          <span className="block px-4 py-2 text-sm hover:bg-gray-100">{link}</span>
+        </Link>
+      ))}
+    </div>
+  </div>
+);
+
+const vapingLinks = ['E-cigarettes', 'E-liquid', 'Mods', 'Herb Vaporizers', 'Concentrate Vaporizers', 'Coils', 'Tanks'];
+const kratomLinks = ['All', 'Capsule', 'Powder', 'Liquid'];
+const cannabisLinks = ['All', 'THC Pre-roll', 'CBD Pre-roll', 'THC Flower', 'CBD Flower'];
+const cigarLinks = ['Cigars'];
+const glasswareLinks = ['Bongs', 'Pipe Tools'];
+const tobaccoLinks = ['Cigarettes', 'Cigars', 'Pipe Tobacco', 'Chewing Tobacco'];
+const smokingAccessoriesLinks = ['Rolling Papers', 'Rolling Machines', 'Filters', 'Grinders', 'Ashtrays', 'Torch', 'Lighters', 'Butane', 'Pipe Cleaners'];
+const hookahLinks = ['Hookahs', 'Hookah Flavor', 'Hookah Bowls', 'Hookah Hoses', 'Hookah Tongs'];
+const incenseLinks = ['Stick Incense', 'Cone Incense', 'Loose Incense', 'Coil Incense'];

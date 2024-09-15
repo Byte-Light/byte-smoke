@@ -1,55 +1,48 @@
 "use client";
-import React, { useState } from "react";
-import CigarForm from "@/components/dashboard/CigarForm";
-import CigarList from "@/components/dashboard/CigarList";
+import CategoryForm from "@/components/dashboard/CategoryForm";
+import { useState } from "react";
 
-const Dashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"form" | "list">("form");
+const categories = [
+  { name: "Vaping", subCategories: ["E-cigarettes", "E-liquid", "Mods", "Herb Vaporizers", "Concentrate Vaporizers", "Coils", "Tanks"] },
+  { name: "Kratom", subCategories: ["All", "Capsul", "Powder", "Liquid"] },
+  { name: "Cannabis", subCategories: ["All", "THC Pre-roll", "CBD Pre-roll", "THC Flower", "CBD Flower"] },
+  { name: "Cigar", subCategories: ["Cigars"] },
+  { name: "Glassware", subCategories: ["Bongs", "Pipe Tools"] },
+  { name: "Tobacco Products", subCategories: ["Cigarettes", "Cigars", "Pipe Tobacco", "Chewing Tobacco"] },
+  { name: "Smoking Accessories", subCategories: ["Rolling Papers", "Rolling Machines", "Filters", "Grinders", "Ashtrays", "Torch", "Lighters", "Butane", "Pipe Cleaners"] },
+  { name: "Hookah Supplies", subCategories: ["Hookahs", "Hookah Flavor", "Hookah Bowls", "Hookah Hoses", "Hookah Tongs"] },
+  { name: "Incense", subCategories: ["Stick incense", "Cone incense", "Loose incense", "Coil incense"] },
+];
 
-  const handleFormSuccess = () => {
-    setActiveTab("list");
-  };
+const Dashboard = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8 flex flex-col lg:flex-row">
-      {/* Sidebar Navigation */}
-      <div className="w-full lg:w-1/4 bg-white shadow-md rounded-lg p-6 mb-6 lg:mb-0">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 lg:mb-8">Cigar Dashboard</h1>
-        <div className="space-y-4">
-          <button
-            className={`w-full text-left px-4 py-2 sm:py-3 text-base sm:text-lg font-medium rounded-lg transition-colors ${
-              activeTab === "form"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-600 hover:bg-gray-400"
-            }`}
-            onClick={() => setActiveTab("form")}
-          >
-            Add Cigar
-          </button>
-          <button
-            className={`w-full text-left px-4 py-2 sm:py-3 text-base sm:text-lg font-medium rounded-lg transition-colors ${
-              activeTab === "list"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-600 hover:bg-gray-400"
-            }`}
-            onClick={() => setActiveTab("list")}
-          >
-            Cigar List
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-6">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-white mb-8 text-center">Manage Products</h1>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {categories.map((category) => (
+            <button
+              key={category.name}
+              onClick={() => setSelectedCategory(category.name)}
+              className={`p-6 rounded-lg shadow-lg transform transition-all duration-300 ${
+                selectedCategory === category.name ? "bg-purple-700 scale-105 text-white" : "bg-white hover:bg-purple-100 text-gray-700"
+              } border border-gray-200 hover:shadow-xl`}
+            >
+              <h2 className="text-xl font-semibold">{category.name}</h2>
+            </button>
+          ))}
         </div>
-      </div>
 
-      {/* Content Section */}
-      <div className="w-full lg:w-3/4 bg-white shadow-md rounded-lg p-6">
-        {activeTab === "form" ? (
-          <div>
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Add a New Cigar</h2>
-            <CigarForm />
-          </div>
-        ) : (
-          <div>
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Your Cigars</h2>
-            <CigarList />
+        {selectedCategory && (
+          <div className="mt-10">
+            <h2 className="text-2xl font-semibold text-white">Add {selectedCategory} Item</h2>
+            <CategoryForm
+              category={selectedCategory}
+              subCategories={categories.find((cat) => cat.name === selectedCategory)?.subCategories || []}
+            />
           </div>
         )}
       </div>

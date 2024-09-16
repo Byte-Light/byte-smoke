@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, limit, startAfter } from "firebase/firestore";
 import { db } from "@/firebase";
+import Checkout from "./Checkout";
 
 interface Product {
   id: string;
@@ -13,32 +14,67 @@ interface Product {
   category: string;
 }
 
+const PAGE_SIZE = 6; // Number of products to fetch per page
+
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [lastDoc, setLastDoc] = useState<any>(null); // Keep track of the last document for pagination
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]); // Store selected products for checkout
+
+  const fetchProducts = async (nextPage = false) => {
+    try {
+      const productsCollection = collection(db, "products");
+      const productsQuery = nextPage
+        ? query(productsCollection, orderBy("name"), startAfter(lastDoc), limit(PAGE_SIZE))
+        : query(productsCollection, orderBy("name"), limit(PAGE_SIZE));
+
+      const productsSnapshot = await getDocs(productsQuery);
+      const productsList = productsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Product[];
+
+      // Set last document from the query for pagination
+      const lastVisible = productsSnapshot.docs[productsSnapshot.docs.length - 1];
+      setLastDoc(lastVisible);
+
+      // Append new products if paginating
+      if (nextPage) {
+        setProducts((prevProducts) => [...prevProducts, ...productsList]);
+      } else {
+        setProducts(productsList);
+      }
+
+      // If fewer products are returned than the page size, it means we have reached the end
+      if (productsList.length < PAGE_SIZE) {
+        setHasMore(false);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const productsCollection = collection(db, "products");
-        const productsSnapshot = await getDocs(productsCollection);
-        const productsList = productsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Product[];
-
-        setProducts(productsList);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
 
-  if (loading) {
+  const loadMoreProducts = () => {
+    if (!loading && hasMore) {
+      setLoading(true);
+      fetchProducts(true);
+    }
+  };
+
+  const addToCheckout = (product: Product) => {
+    setSelectedProducts((prevProducts) => [...prevProducts, product]);
+  };
+
+  if (loading && products.length === 0) {
     return <div className="text-center text-white">Loading products...</div>;
   }
 
@@ -66,10 +102,32 @@ const ProductList: React.FC = () => {
               <p className="text-gray-500">{product.subCategory}</p>
               <p className="text-gray-600 mt-2 line-clamp-2">{product.description}</p>
               <p className="text-indigo-600 font-semibold text-xl mt-4">${product.price}</p>
+              <button
+                className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+                onClick={() => addToCheckout(product)}
+              >
+                Add to Checkout
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Load More Button */}
+      {hasMore && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={loadMoreProducts}
+            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-all"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
+
+      {/* Checkout Component */}
+      <Checkout selectedProducts={selectedProducts} />
     </div>
   );
 };

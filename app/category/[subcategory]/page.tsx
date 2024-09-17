@@ -1,5 +1,5 @@
 "use client";
-import ProductList from '@/components/dashboard/ProductList';
+import ProductList from '@/components/product/ProductList';
 import { useParams } from 'next/navigation';
 
 const SubCategoryPage = () => {

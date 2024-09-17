@@ -1,5 +1,4 @@
-import ProductList from "@/components/dashboard/ProductList";
-
+import ProductList from "@/components/product/ProductList";
 
 const OurProducts: React.FC = () => {
   return (

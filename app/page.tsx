@@ -1,9 +1,9 @@
 
 import ByteFamily from "@/components/home/ByteFamily";
-import CigarSpotlight from "@/components/home/CigarSpotlight";
 import Footer from "@/components/home/Footer";
 import GoogleMapComponent from "@/components/home/GoogleMap";
 import GridSection from "@/components/home/GridSection";
+import ProductSpotlight from "@/components/home/ProductSpotlight";
 import ReviewsSection from "@/components/home/ReviewsSection";
 import TobaccoInfo from "@/components/home/TobaccoInfo";
 
@@ -12,7 +12,7 @@ export default function Home() {
     
     <div>
       <GridSection />
-      <CigarSpotlight />
+      <ProductSpotlight />
       <ByteFamily />
       <TobaccoInfo />
       <ReviewsSection />

@@ -1,8 +1,18 @@
+"use client";
+
+import React, { useState } from 'react';
 import Link from 'next/link';
-import React from 'react';
-import { FaHeart, FaHeadset, FaSearch, FaShoppingBasket, FaClipboardList } from 'react-icons/fa';
+import { FaHeart, FaHeadset, FaSearch, FaShoppingBasket, FaClipboardList, FaTimes } from 'react-icons/fa';
+import SearchBar from '../SearchBar';
+import SearchSpotlight from '../SearchSpotlight'; // Assuming this component renders products
 
 const Header: React.FC = () => {
+  const [searchResults, setSearchResults] = useState<any[]>([]); // State to hold search results
+
+  const clearSearchResults = () => {
+    setSearchResults([]); // Clear the search results when 'X' button is clicked
+  };
+
   return (
     <header className="w-full py-4 bg-gradient-to-r from-blue-500 via-purple-600 to-gray-700 shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 flex justify-between items-center space-x-6">
@@ -17,21 +27,11 @@ const Header: React.FC = () => {
 
         {/* Search Bar */}
         <div className="flex-grow max-w-lg hidden sm:flex items-center">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="w-full py-2 pl-5 pr-14 text-sm border-2 border-transparent rounded-full shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition bg-white"
-            />
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white rounded-full p-2 shadow-lg hover:bg-indigo-600 transition">
-              <FaSearch />
-            </button>
-          </div>
+          <SearchBar setSearchResults={setSearchResults} /> {/* Pass setSearchResults to SearchBar */}
         </div>
 
         {/* Action Icons */}
         <div className="flex space-x-6 items-center">
-          
           {/* Contact Info */}
           <div className="hidden lg:flex items-center space-x-3 text-gray-300">
             <FaHeadset size={22} />
@@ -61,19 +61,20 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
-      <div className="sm:hidden px-4 mt-4">
-        <div className="relative w-full">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full py-2 pl-4 pr-14 text-sm border-2 border-transparent rounded-full shadow-sm focus:outline-none focus:ring-4 focus:ring-indigo-300 transition bg-white"
-          />
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white rounded-full p-2 shadow-lg hover:bg-indigo-600 transition">
-            <FaSearch />
+      {/* Search Results Spotlight */}
+      {searchResults.length > 0 && (
+        <div className="mt-4 px-4 relative">
+          {/* Close Button */}
+          <button
+            onClick={clearSearchResults}
+            className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition-transform transform hover:scale-105"
+            aria-label="Clear Search Results"
+          >
+            <FaTimes size={16} />
           </button>
+          <SearchSpotlight productsProp={searchResults} /> {/* Display search results */}
         </div>
-      </div>
+      )}
     </header>
   );
 };

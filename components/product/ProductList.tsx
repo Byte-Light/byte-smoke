@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy, limit, startAfter } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, where, limit, startAfter } from "firebase/firestore"; 
 import { db } from "@/firebase";
 import Checkout from "./Checkout";
 
@@ -16,19 +16,37 @@ interface Product {
 
 const PAGE_SIZE = 6; // Number of products to fetch per page
 
-const ProductList: React.FC = () => {
+const ProductList: React.FC<{ subcategory: string }> = ({ subcategory }) => { 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [lastDoc, setLastDoc] = useState<any>(null); // Keep track of the last document for pagination
+  const [lastDoc, setLastDoc] = useState<any>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]); // Store selected products for checkout
+  const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
+
+  // Function to capitalize the first letter of the subcategory
+  const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+  const capitalizedSubcategory = capitalizeFirstLetter(subcategory); // Adjust subcategory to match Firebase case
 
   const fetchProducts = async (nextPage = false) => {
     try {
       const productsCollection = collection(db, "products");
+
+      // Adjust the query to use the capitalized subcategory
       const productsQuery = nextPage
-        ? query(productsCollection, orderBy("name"), startAfter(lastDoc), limit(PAGE_SIZE))
-        : query(productsCollection, orderBy("name"), limit(PAGE_SIZE));
+        ? query(
+            productsCollection,
+            where("subCategory", "==", capitalizedSubcategory), 
+            orderBy("name"),
+            startAfter(lastDoc),
+            limit(PAGE_SIZE)
+          )
+        : query(
+            productsCollection,
+            where("subCategory", "==", capitalizedSubcategory), 
+            orderBy("name"),
+            limit(PAGE_SIZE)
+          );
 
       const productsSnapshot = await getDocs(productsQuery);
       const productsList = productsSnapshot.docs.map((doc) => ({
@@ -61,7 +79,7 @@ const ProductList: React.FC = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [subcategory]);
 
   const loadMoreProducts = () => {
     if (!loading && hasMore) {
@@ -79,12 +97,12 @@ const ProductList: React.FC = () => {
   }
 
   if (!products.length) {
-    return <div className="text-center text-white">No products available.</div>;
+    return <div className="text-center text-white">No products available in {subcategory}.</div>;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-500 via-indigo-500 to-blue-500 p-6">
-      <h1 className="text-4xl font-extrabold text-white text-center mb-8">Products List</h1>
+      <h1 className="text-4xl font-extrabold text-white text-center mb-8">{subcategory} Products</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {products.map((product) => (

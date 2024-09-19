@@ -53,7 +53,7 @@ const ProductSpotlight: React.FC = () => {
     <div className="container mx-auto p-8 bg-gradient-to-r from-blue-50 via-purple-50 to-gray-100 rounded-lg">
       <h2 className="text-5xl font-extrabold text-center mb-12 text-gray-900">Product Spotlight</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {products.map((product) => (
+        {products.slice(0, 4).map((product) => (
           <div
             key={product.id}
             className="relative bg-white bg-gradient-to-t from-gray-100 to-white border border-gray-200 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 p-6"

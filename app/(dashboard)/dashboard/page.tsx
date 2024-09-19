@@ -4,15 +4,15 @@ import CategoryList from "@/components/dashboard/CategoryList";
 import { useState } from "react";
 
 const categories = [
-  { name: "Vaping", subCategories: ["E-cigarettes", "E-liquid", "Mods", "Herb Vaporizers", "Concentrate Vaporizers", "Coils", "Tanks"] },
-  { name: "Kratom", subCategories: ["All", "Capsul", "Powder", "Liquid"] },
-  { name: "Cannabis", subCategories: ["All", "THC Pre-roll", "CBD Pre-roll", "THC Flower", "CBD Flower"] },
-  { name: "Cigar", subCategories: ["Cigars"] },
-  { name: "Glassware", subCategories: ["Bongs", "Pipe Tools"] },
-  { name: "Tobacco Products", subCategories: ["Cigarettes", "Cigars", "Pipe Tobacco", "Chewing Tobacco"] },
-  { name: "Smoking Accessories", subCategories: ["Rolling Papers", "Rolling Machines", "Filters", "Grinders", "Ashtrays", "Torch", "Lighters", "Butane", "Pipe Cleaners"] },
-  { name: "Hookah Supplies", subCategories: ["Hookahs", "Hookah Flavor", "Hookah Bowls", "Hookah Hoses", "Hookah Tongs"] },
-  { name: "Incense", subCategories: ["Stick incense", "Cone incense", "Loose incense", "Coil incense"] },
+  { name: "Vaping", subCategories: ["e-cigarettes", "e-liquid", "mods", "herb-vaporizers", "concentrate-vaporizers", "coils", "tanks"] },
+  { name: "Kratom", subCategories: ["capsule", "powder", "liquid"] },
+  { name: "Cannabis", subCategories: ["thc-pre-roll", "cbd-pre-roll", "thc-flower", "cbd-flower"] },
+  { name: "Cigar", subCategories: ["cigars"] },
+  { name: "Glassware", subCategories: ["bongs", "pipe-tools"] },
+  { name: "Tobacco Products", subCategories: ["cigarettes", "cigars", "pipe-tobacco", "chewing-tobacco"] },
+  { name: "Smoking Accessories", subCategories: ["rolling-papers", "rolling-machines", "filters", "grinders", "ashtrays", "torch", "lighters", "butane", "pipe-cleaners"] },
+  { name: "Hookah Supplies", subCategories: ["hookahs", "hookah-flavor", "hookah-bowls", "hookah-hoses", "hookah-tongs"] },
+  { name: "Incense", subCategories: ["stick-incense", "cone-incense", "loose-incense", "coil-incense"] },
 ];
 
 const Dashboard = () => {

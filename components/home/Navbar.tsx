@@ -97,7 +97,6 @@ const vapingLinks = [
 ];
 
 const kratomLinks = [
-  { name: "All", slug: "all" },
   { name: "Capsule", slug: "capsule" },
   { name: "Powder", slug: "powder" },
   { name: "Liquid", slug: "liquid" },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/firebase";
@@ -12,13 +12,24 @@ interface CategoryFormProps {
 const CategoryForm: React.FC<CategoryFormProps> = ({ category, subCategories }) => {
   const [formData, setFormData] = useState({
     name: "",
-    subCategory: subCategories[0],
+    subCategory: subCategories[0], // Initial value from subCategories
     description: "",
     price: "",
     image: null as File | null,
   });
 
   const [progress, setProgress] = useState<number>(0);
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Reference for the file input
+
+  // Update subCategory when subCategories prop changes
+  useEffect(() => {
+    if (subCategories.length > 0) {
+      setFormData((prevData) => ({
+        ...prevData,
+        subCategory: subCategories[0], // Set to the first subCategory when the category changes
+      }));
+    }
+  }, [subCategories]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,14 +85,20 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, subCategories }) 
 
           alert(`${category} item added successfully!`);
 
+          // Clear form and reset progress
           setFormData({
             name: "",
-            subCategory: subCategories[0],
+            subCategory: subCategories[0], // Reset to first subCategory of the selected category
             description: "",
             price: "",
             image: null,
           });
           setProgress(0);
+
+          // Clear the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
         }
       );
     } catch (error) {
@@ -138,6 +155,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ category, subCategories }) 
 
       <input
         type="file"
+        ref={fileInputRef} // Attach the ref to the file input
         onChange={handleImageChange}
         className="w-full p-4 border border-gray-300 rounded-lg focus:border-pink-500 focus:ring focus:ring-pink-200 transition duration-300"
         required

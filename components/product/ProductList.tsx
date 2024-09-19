@@ -23,27 +23,22 @@ const ProductList: React.FC<{ subcategory: string }> = ({ subcategory }) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
 
-  // Function to capitalize the first letter of the subcategory
-  const capitalizeFirstLetter = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
-
-  const capitalizedSubcategory = capitalizeFirstLetter(subcategory); // Adjust subcategory to match Firebase case
-
   const fetchProducts = async (nextPage = false) => {
     try {
       const productsCollection = collection(db, "products");
 
-      // Adjust the query to use the capitalized subcategory
+      // Use the subcategory directly without capitalizing it
       const productsQuery = nextPage
         ? query(
             productsCollection,
-            where("subCategory", "==", capitalizedSubcategory), 
+            where("subCategory", "==", subcategory), 
             orderBy("name"),
             startAfter(lastDoc),
             limit(PAGE_SIZE)
           )
         : query(
             productsCollection,
-            where("subCategory", "==", capitalizedSubcategory), 
+            where("subCategory", "==", subcategory), 
             orderBy("name"),
             limit(PAGE_SIZE)
           );

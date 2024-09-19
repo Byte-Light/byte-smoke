@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, deleteDoc } from "firebase/firestore";
 import { db } from "@/firebase"; // Import your Firebase configuration
 
 interface CheckoutData {
@@ -40,6 +40,22 @@ const FetchCheckouts: React.FC = () => {
     fetchCheckouts();
   }, []);
 
+  // Function to handle deleting a checkout
+  const handleDelete = async (id: string) => {
+    const confirmation = window.confirm("Are you sure you want to delete this checkout?");
+    if (!confirmation) return;
+
+    try {
+      const checkoutDocRef = doc(db, "checkouts", id);
+      await deleteDoc(checkoutDocRef);
+      setCheckouts(checkouts.filter((checkout) => checkout.id !== id));
+      window.alert("Checkout deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting checkout:", error);
+      window.alert("Error deleting checkout. Please try again.");
+    }
+  };
+
   if (loading) {
     return <div className="text-center text-white">Loading checkout data...</div>;
   }
@@ -64,7 +80,15 @@ const FetchCheckouts: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="mt-4 text-sm text-gray-400">Checkout Date: {new Date(checkout.createdAt).toLocaleString()}</p>
+          <p className="mt-4 text-sm text-gray-400">
+            Checkout Date: {new Date(checkout.createdAt).toLocaleString()}
+          </p>
+          <button
+            onClick={() => handleDelete(checkout.id)}
+            className="bg-red-600 p-2 rounded text-white"
+          >
+            Delete
+          </button>
         </div>
       ))}
     </div>

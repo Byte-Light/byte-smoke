@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "@/firebase"; // Import your Firebase Firestore configuration
 
 interface Product {
   id: string;
@@ -16,11 +18,40 @@ interface CheckoutProps {
 }
 
 const Checkout: React.FC<CheckoutProps> = ({ selectedProducts }) => {
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const [phoneError, setPhoneError] = useState<string>("");
+
   const totalPrice = selectedProducts.reduce((acc, product) => acc + parseFloat(product.price), 0);
 
-  const handleCheckout = () => {
-    alert("Proceeding to payment. Total: $" + totalPrice.toFixed(2));
-    // Add your payment processing logic here
+  const handleCheckout = async () => {
+    // Simple phone number validation (you can customize this further)
+    const phoneRegex = /^\d{10,15}$/; // Allows 10 to 15 digits
+    if (!phoneRegex.test(phoneNumber)) {
+      setPhoneError("Please enter a valid phone number.");
+      return;
+    }
+
+    // Create the checkout data
+    const checkoutData = {
+      phoneNumber,
+      totalPrice: totalPrice.toFixed(2),
+      selectedProducts: selectedProducts.map((product) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        subCategory: product.subCategory,
+      })),
+      createdAt: new Date(),
+    };
+
+    try {
+      // Add checkout data to Firestore
+      const docRef = await addDoc(collection(db, "checkouts"), checkoutData);
+      alert(`Checkout successful. Document ID: ${docRef.id}`);
+    } catch (error) {
+      console.error("Error adding checkout to Firestore:", error);
+      alert("Failed to complete checkout.");
+    }
   };
 
   if (selectedProducts.length === 0) {
@@ -42,6 +73,23 @@ const Checkout: React.FC<CheckoutProps> = ({ selectedProducts }) => {
       ))}
 
       <div className="mt-6 text-2xl font-semibold">Total: ${totalPrice.toFixed(2)}</div>
+
+      {/* Phone Number Input */}
+      <div className="mt-6">
+        <label htmlFor="phone" className="block text-lg font-medium mb-2">Phone Number</label>
+        <input
+          type="tel"
+          id="phone"
+          value={phoneNumber}
+          onChange={(e) => {
+            setPhoneNumber(e.target.value);
+            setPhoneError(""); // Clear error when user starts typing
+          }}
+          placeholder="Enter your phone number"
+          className="w-full p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:border-indigo-500"
+        />
+        {phoneError && <p className="text-red-500 mt-2">{phoneError}</p>}
+      </div>
 
       <button
         onClick={handleCheckout}

@@ -53,11 +53,6 @@ const Header: React.FC = () => {
             <span className="hidden md:inline text-sm">Cigar Finder</span>
           </div>
 
-          {/* Basket */}
-          <div className="flex items-center space-x-2 text-gray-300 hover:text-white transition cursor-pointer">
-            <FaShoppingBasket size={22} />
-            <span className="hidden md:inline text-sm">Basket £0.00</span>
-          </div>
         </div>
       </div>
 

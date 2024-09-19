@@ -1,6 +1,7 @@
 "use client";
 import CategoryForm from "@/components/dashboard/CategoryForm";
 import CategoryList from "@/components/dashboard/CategoryList";
+import FetchCheckouts from "@/components/dashboard/FetchCheckouts"; // Import the FetchCheckouts component
 import { useState } from "react";
 
 const categories = [
@@ -37,10 +38,16 @@ const Dashboard = () => {
             Add Product
           </button>
           <button
-            className={`w-full text-left px-4 py-2 rounded ${selectedTab === 1 ? "bg-purple-700" : "hover:bg-gray-700"}`}
+            className={`w-full text-left px-4 py-2 mb-2 rounded ${selectedTab === 1 ? "bg-purple-700" : "hover:bg-gray-700"}`}
             onClick={() => handleTabClick(1)}
           >
            Manage Products
+          </button>
+          <button
+            className={`w-full text-left px-4 py-2 rounded ${selectedTab === 2 ? "bg-purple-700" : "hover:bg-gray-700"}`}
+            onClick={() => handleTabClick(2)}
+          >
+            Checkout History
           </button>
         </div>
       </div>
@@ -79,6 +86,13 @@ const Dashboard = () => {
         {selectedTab === 1 && (
           <div className="max-w-7xl mx-auto">
            <CategoryList />
+          </div>
+        )}
+
+        {selectedTab === 2 && (
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-4xl font-bold text-white mb-8 text-center">Checkout History</h1>
+            <FetchCheckouts />
           </div>
         )}
       </div>
